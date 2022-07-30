@@ -9,7 +9,9 @@ import SignIN from "./pages/signIn";
 import SignUP from "./pages/signUp";
 import ForgotPassword from "./pages/forgotPassword";
 
+
 import Navbar from "./components/navbar";
+import PrivateRoute from "./components/privateRoute";
 
 function App() {
   return (
@@ -18,7 +20,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Explore />} />
           <Route path="/offers" element={<Offers />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<PrivateRoute />} >
+            <Route path="/profile" element={<Profile />} />
+          </Route>
           <Route path="/sign-in" element={<SignIN />} />
           <Route path="/sign-up" element={<SignUP />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

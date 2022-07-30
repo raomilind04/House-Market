@@ -86,7 +86,7 @@ function Profile() {
               className="profileEmail"
               id="email"
               type="text"
-              disabled="true"
+              disabled={true}
               onChange={onChange}
               value={email}
             />
