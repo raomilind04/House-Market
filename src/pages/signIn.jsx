@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { ReactComponent as ArrowRightIcon } from "../assets/svg/keyboardArrowRightIcon.svg";
 import visibilityIcon from "../assets/svg/visibilityIcon.svg";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {toast} from "react-toastify"; 
 
 function SignIN() {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,7 +36,7 @@ function SignIN() {
         navigate("/");
       }
     } catch (error) {
-      console.log(error);
+        toast.error("Incorrect Password/Username")
     }
   };
 
