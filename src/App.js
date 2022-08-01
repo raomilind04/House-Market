@@ -8,6 +8,7 @@ import Profile from "./pages/profile";
 import SignIN from "./pages/signIn";
 import SignUP from "./pages/signUp";
 import ForgotPassword from "./pages/forgotPassword";
+import Category from "./pages/category";
 
 
 import Navbar from "./components/navbar";
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Explore />} />
           <Route path="/offers" element={<Offers />} />
+          <Route path="/category/:categoryName" element={<Category />} />
           <Route path="/profile" element={<PrivateRoute />} >
             <Route path="/profile" element={<Profile />} />
           </Route>
