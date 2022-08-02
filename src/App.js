@@ -9,6 +9,7 @@ import SignIN from "./pages/signIn";
 import SignUP from "./pages/signUp";
 import ForgotPassword from "./pages/forgotPassword";
 import Category from "./pages/category";
+import CreateListing from "./pages/createListing";
 
 
 import Navbar from "./components/navbar";
@@ -28,6 +29,7 @@ function App() {
           <Route path="/sign-in" element={<SignIN />} />
           <Route path="/sign-up" element={<SignUP />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/create-listing" element={<CreateListing />} />
         </Routes>
         <Navbar />
       </Router>
