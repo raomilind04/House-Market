@@ -1,8 +1,17 @@
 import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { db } from "../firebase.config";
+import { v4 as uuidv4 } from "uuid";
 
 import Spinner from "../components/spinner";
+import { toast } from "react-toastify";
 
 function CreateListing() {
   const [formData, setFormData] = useState({
@@ -52,32 +61,92 @@ function CreateListing() {
     return <Spinner />;
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData); 
+    setLoading(true);
+    if (discountedPrice >= regularPrice) {
+      setLoading(false);
+      toast.error("Discounted price should be less than Regular price");
+      return;
+    }
+    if (images.length > 6) {
+      toast.error("A max of 6 images can be uploaded ");
+      return;
+    }
+    let geoLocation = {};
+    let location;
+    geoLocation.lat = latitude;
+    geoLocation.lng = longitude;
+    location = address;
+    console.log(geoLocation, location);
+
+    const storeImage = async (image) => {
+      return new Promise((resolve, reject) => {
+        const storage = getStorage();
+        const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+
+        const storageRef = ref(storage, "images/" + fileName);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
+            switch (snapshot.state) {
+              case "paused":
+                console.log("Upload is paused");
+                break;
+              case "running":
+                console.log("Upload is running");
+                break;
+            }
+          },
+          (error) => {
+            reject(error)
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              resolve(downloadURL); 
+            });
+          }
+        );
+      });
+    };
+
+    const imageUrls= await Promise.all(
+        [...images].map((image)=> storeImage(image))
+    ).catch((error)=> {
+        setLoading(false); 
+        toast.error("Unable to Upload Images"); 
+        console.log(error); 
+        return
+    })
+
+    console.log(imageUrls); 
+    setLoading(false);
   };
   const onMutate = (e) => {
-
-    let bool= null; 
-   if( e.target.value=== "true"){
-    bool= true; 
-   }
-   if(e.target.value=== "false"){
-    bool= false; 
-   }
-   if(e.target.files){
-    setFormData((prevState)=> ({
-        ...prevState, 
-        images: e.target.files
-    }))
-   }
-   if(!e.target.files){
-    setFormData((prevState)=> ({
-        ...prevState, 
-        [e.target.id]: bool ?? e.target.value
-    }))
-   }
-
+    let bool = null;
+    if (e.target.value === "true") {
+      bool = true;
+    }
+    if (e.target.value === "false") {
+      bool = false;
+    }
+    if (e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        images: e.target.files,
+      }));
+    }
+    if (!e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.id]: bool ?? e.target.value,
+      }));
+    }
   };
 
   return (
