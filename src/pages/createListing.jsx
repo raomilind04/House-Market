@@ -9,6 +9,7 @@ import {
 } from "firebase/storage";
 import { db } from "../firebase.config";
 import { v4 as uuidv4 } from "uuid";
+import {addDoc, collection, serverTimestamp} from "firebase/firestore"; 
 
 import Spinner from "../components/spinner";
 import { toast } from "react-toastify";
@@ -47,7 +48,7 @@ function CreateListing() {
   } = formData;
 
   const auth = getAuth();
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -124,8 +125,23 @@ function CreateListing() {
         return
     })
 
-    console.log(imageUrls); 
+    const formDataCopy = {
+        ...formData, 
+        imageUrls, 
+        geoLocation, 
+        timestamp: serverTimestamp()
+    }
+    delete formDataCopy.images; 
+    delete formDataCopy.address; 
+    location && (formDataCopy.location= location); 
+    !formDataCopy.offer && delete formDataCopy.discountedPrice; 
+
+    const docRef= await addDoc(collection(db, "listings"), formDataCopy);
     setLoading(false);
+    toast.success("Successfully Listed Property"); 
+
+    navigate(`/category/${formDataCopy.type}/${docRef.id}`)
+
   };
   const onMutate = (e) => {
     let bool = null;
