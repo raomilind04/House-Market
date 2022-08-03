@@ -6,6 +6,8 @@ import { db } from "../firebase.config";
 import Spinner from "../components/spinner";
 import shareIcon from "../assets/svg/shareIcon.svg";
 
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+
 function Listing() {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -30,10 +32,10 @@ function Listing() {
     fetchListing();
   }, []);
 
-  if(loading){
-    return <Spinner />
+  if (loading) {
+    return <Spinner />;
   }
-  console.log(listing); 
+  
 
   return (
     <main>
@@ -83,6 +85,24 @@ function Listing() {
           <li>{listing.furnished && "Furnished"}</li>
         </ul>
         <p className="listingLocationTitle">Location</p>
+        <div className="leafletContainer">
+        
+          <MapContainer
+            style={{ height: "100%", width: "100%" }}
+            zoom={13}
+            scrollWheelZoom={false}
+            center={[listing.geolocation.lat, listing.geolocation.lng]}
+          >
+            <TileLayer
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"
+            />
+            <Marker position={[listing.geolocation.lat, listing.geolocation.lng]}>
+              <Popup>{listing.name} : {listing.location}</Popup>
+            </Marker>
+          </MapContainer>
+        </div>
+
         {auth.currentUser?.uid !== listing.userRef && (
           <Link
             to={`/contact/${listing.userRef}?listingName=${listing.name}`}
