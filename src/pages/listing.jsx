@@ -116,14 +116,14 @@ function Listing() {
             style={{ height: "100%", width: "100%" }}
             zoom={13}
             scrollWheelZoom={false}
-            center={[listing.geolocation.lat, listing.geolocation.lng]}
+            center={[listing.geoLocation.lat, listing.geoLocation.lng]}
           >
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png"
             />
             <Marker
-              position={[listing.geolocation.lat, listing.geolocation.lng]}
+              position={[listing.geoLocation.lat, listing.geoLocation.lng]}
             >
               <Popup>
                 {listing.name} : {listing.location}
