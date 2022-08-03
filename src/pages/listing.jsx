@@ -7,7 +7,7 @@ import Spinner from "../components/spinner";
 import shareIcon from "../assets/svg/shareIcon.svg";
 
 function Listing() {
-  const [listing, setListing] = useState({});
+  const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
 
@@ -31,7 +31,7 @@ function Listing() {
   }, []);
 
   if(loading){
-    <Spinner />
+    return <Spinner />
   }
   console.log(listing); 
 

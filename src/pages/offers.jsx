@@ -13,7 +13,7 @@ import {
 import { db } from "../firebase.config";
 import { toast } from "react-toastify";
 import Spinner from "../components/spinner";
-import { async } from "@firebase/util";
+
 import ListingItem from "../components/listingItem";
 
 function Offers() {
