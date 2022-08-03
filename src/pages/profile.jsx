@@ -100,6 +100,9 @@ function Profile() {
       toast.success("Deleted Listed Property"); 
     }
   }
+  const onEdit= (listingId)=> {
+    navigate(`/edit-listing/${listingId}`)
+  }
 
   return (
     <div className="profile">
@@ -160,6 +163,7 @@ function Profile() {
                     listing={listing.data}
                     id={listing.id}
                     onDelete= {()=> onDelete(listing.id)}
+                    onEdit= {()=> onEdit(listing.id)}
                   />
                 );
               })}

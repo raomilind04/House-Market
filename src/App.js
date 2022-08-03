@@ -12,6 +12,7 @@ import Category from "./pages/category";
 import CreateListing from "./pages/createListing";
 import Listing from "./pages/listing";
 import Contact from "./pages/contact";
+import EditListing from "./pages/editListing";
 
 
 import Navbar from "./components/navbar";
@@ -34,6 +35,7 @@ function App() {
           <Route path="/create-listing" element={<CreateListing />} />
           <Route path="/category/:categoryName/:listingId" element={<Listing />} />
           <Route path="/contact/:ownerId" element={<Contact />} />
+          <Route path="/edit-listing/:listingId" element={<EditListing />} />
         </Routes>
         <br/> 
         <br />
