@@ -35,6 +35,8 @@ function App() {
           <Route path="/category/:categoryName/:listingId" element={<Listing />} />
           <Route path="/contact/:ownerId" element={<Contact />} />
         </Routes>
+        <br/> 
+        <br />
         <Navbar />
       </Router>
       <ToastContainer />
